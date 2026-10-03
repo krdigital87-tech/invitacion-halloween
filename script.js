@@ -188,19 +188,22 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("asistencia");
 
     const personas =
-        document.getElementById("personas");
+    document.getElementById("personas");
+
+    const numeroPersonas =
+    document.getElementById("numeroPersonas");
 
     const btnMenos =
-        document.getElementById("btnMenos");
+    document.getElementById("btnRestarPersona");
 
     const btnMas =
-        document.getElementById("btnMas");
+    document.getElementById("btnSumarPersona");
 
     const formRSVP =
-        document.getElementById("formRSVP");
+    document.getElementById("formRSVP");
 
     const nombre =
-        document.getElementById("nombre");
+    document.getElementById("nombre");
 
 
     // ==========================================
@@ -208,20 +211,21 @@ document.addEventListener("DOMContentLoaded", function () {
     // ==========================================
 
     let totalPersonas = 1;
-
-
+    
+    
     function actualizarContador() {
 
-        personas.value = totalPersonas;
+    personas.value = totalPersonas;
+    numeroPersonas.textContent = totalPersonas;
 
-        btnMenos.disabled =
-            asistencia.value !== "si" ||
-            totalPersonas <= 1;
+    btnMenos.disabled =
+        asistencia.value !== "si" ||
+        totalPersonas <= 1;
 
-        btnMas.disabled =
-            asistencia.value !== "si" ||
-            totalPersonas >= 5;
-    }
+    btnMas.disabled =
+        asistencia.value !== "si" ||
+        totalPersonas >= 5;
+}
 
 
     // Al cargar la página el contador está bloqueado
