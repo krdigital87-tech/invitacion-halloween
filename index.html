@@ -441,21 +441,13 @@
                         Número total de personas
                     </label>
 
-                    <select
-                        id="personas"
-                        name="personas"
-                        required
-                    >
-                        <option value="">
-                            Selecciona
-                        </option>
+                    <div class="contador-personas" id="contadorPersonas" aria-label="Número total de personas">
+                        <button type="button" id="btnRestarPersona" class="btn-contador" aria-label="Restar una persona" disabled>−</button>
+                        <span id="numeroPersonas" class="numero-personas">1</span>
+                        <button type="button" id="btnSumarPersona" class="btn-contador" aria-label="Sumar una persona" disabled>+</button>
+                    </div>
 
-                        <option value="1">1 persona</option>
-                        <option value="2">2 personas</option>
-                        <option value="3">3 personas</option>
-                        <option value="4">4 personas</option>
-                        <option value="5">5 personas</option>
-                    </select>
+                    <input type="hidden" id="personas" name="personas" value="0">
 
                     <button
                         type="submit"

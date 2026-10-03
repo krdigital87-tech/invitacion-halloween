@@ -1718,3 +1718,16 @@ img {
 @media (prefers-reduced-motion: reduce) {
     .imagen-sobre, .sobre-indicacion { animation: none; }
 }
+
+/* =========================================
+   CONTADOR DE PERSONAS RSVP
+========================================= */
+.contador-personas { width:100%; min-height:58px; display:grid; grid-template-columns:58px 1fr 58px; align-items:center; border:1px solid #433747; background:#08060a; overflow:hidden; }
+.btn-contador { width:58px; height:58px; border:0; background:rgba(84,16,102,.55); color:#ff7a21; font-size:2rem; line-height:1; cursor:pointer; transition:.25s ease; }
+.btn-contador:first-child { border-right:1px solid #433747; }
+.btn-contador:last-child { border-left:1px solid #433747; }
+.btn-contador:hover:not(:disabled), .btn-contador:focus-visible:not(:disabled) { background:rgba(141,26,176,.72); color:#fff; box-shadow:inset 0 0 18px rgba(192,75,236,.25); }
+.btn-contador:disabled { color:#665b69; background:rgba(25,14,29,.55); cursor:not-allowed; opacity:.55; }
+.numero-personas { display:flex; align-items:center; justify-content:center; min-height:58px; color:#f3e9f5; font-family:Arial,sans-serif; font-size:1.35rem; font-weight:700; text-align:center; }
+@media (max-width:480px) { .contador-personas { grid-template-columns:54px 1fr 54px; } .btn-contador { width:54px; height:56px; } .numero-personas { min-height:56px; } }
+

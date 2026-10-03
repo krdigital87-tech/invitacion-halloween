@@ -35,13 +35,24 @@ document.addEventListener("DOMContentLoaded", function () {
     // 3. PANTALLAS Y BOTÓN DE SONIDO
     // ==========================================
 
-    const pantallaSobre = document.getElementById("pantallaSobre");
-    const btnSobre = document.getElementById("btnSobre");
-    const btnAbrir = document.getElementById("btnAbrir");
-    const entrada = document.getElementById("entrada");
-    const invitacion = document.getElementById("invitacion");
+    const pantallaSobre =
+        document.getElementById("pantallaSobre");
 
-    const botonSonido = document.createElement("button");
+    const btnSobre =
+        document.getElementById("btnSobre");
+
+    const btnAbrir =
+        document.getElementById("btnAbrir");
+
+    const entrada =
+        document.getElementById("entrada");
+
+    const invitacion =
+        document.getElementById("invitacion");
+
+
+    const botonSonido =
+        document.createElement("button");
 
     botonSonido.type = "button";
     botonSonido.id = "botonSonido";
@@ -97,24 +108,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     btnSobre.addEventListener("click", function () {
 
-        // Ocultamos la pantalla del sobre
         pantallaSobre.style.display = "none";
 
-        // Mostramos la portada de Halloween
         entrada.style.display = "flex";
 
-        // Mostramos control de sonido
         botonSonido.style.display = "block";
 
         window.scrollTo(0, 0);
 
 
-        // ======================================
-        // INICIAR MÚSICA DE PORTADA + RISAS
-        // ======================================
-
         musicaInicio.currentTime = 0;
         efectoRisas.currentTime = 0;
+
 
         musicaInicio.play().catch(function (error) {
 
@@ -124,6 +129,7 @@ document.addEventListener("DOMContentLoaded", function () {
             );
 
         });
+
 
         efectoRisas.play().catch(function (error) {
 
@@ -143,7 +149,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     btnAbrir.addEventListener("click", function () {
 
-        // Detenemos música de portada
         musicaInicio.pause();
         efectoRisas.pause();
 
@@ -151,22 +156,17 @@ document.addEventListener("DOMContentLoaded", function () {
         efectoRisas.currentTime = 0;
 
 
-        // Ocultamos portada
         entrada.style.display = "none";
 
-        // Mostramos invitación
         invitacion.style.display = "block";
 
         window.scrollTo(0, 0);
 
 
-        // ======================================
-        // INICIAR CANCIÓN PRINCIPAL
-        // ======================================
-
         musicaPrincipal.currentTime = 0;
 
         musicaPrincipal.muted = !sonidoActivo;
+
 
         musicaPrincipal.play().catch(function (error) {
 
@@ -190,6 +190,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const personas =
         document.getElementById("personas");
 
+    const btnMenos =
+        document.getElementById("btnMenos");
+
+    const btnMas =
+        document.getElementById("btnMas");
+
     const formRSVP =
         document.getElementById("formRSVP");
 
@@ -197,30 +203,95 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("nombre");
 
 
-    // Número de personas bloqueado al inicio
-    personas.disabled = true;
+    // ==========================================
+    // 7. CONTADOR DE PERSONAS
+    // ==========================================
+
+    let totalPersonas = 1;
+
+
+    function actualizarContador() {
+
+        personas.value = totalPersonas;
+
+        btnMenos.disabled =
+            asistencia.value !== "si" ||
+            totalPersonas <= 1;
+
+        btnMas.disabled =
+            asistencia.value !== "si" ||
+            totalPersonas >= 5;
+    }
+
+
+    // Al cargar la página el contador está bloqueado
+
+    personas.value = 1;
+
+    btnMenos.disabled = true;
+    btnMas.disabled = true;
 
 
     // ==========================================
-    // 7. CONTROL SÍ / NO
+    // BOTÓN MENOS
+    // ==========================================
+
+    btnMenos.addEventListener("click", function () {
+
+        if (
+            asistencia.value === "si" &&
+            totalPersonas > 1
+        ) {
+
+            totalPersonas--;
+
+            actualizarContador();
+        }
+
+    });
+
+
+    // ==========================================
+    // BOTÓN MÁS
+    // ==========================================
+
+    btnMas.addEventListener("click", function () {
+
+        if (
+            asistencia.value === "si" &&
+            totalPersonas < 5
+        ) {
+
+            totalPersonas++;
+
+            actualizarContador();
+        }
+
+    });
+
+
+    // ==========================================
+    // 8. CONTROL SÍ / NO
     // ==========================================
 
     asistencia.addEventListener("change", function () {
 
         if (asistencia.value === "si") {
 
-            personas.disabled = false;
-            personas.value = "";
+            totalPersonas = 1;
 
-        } else if (asistencia.value === "no") {
+            personas.value = 1;
 
-            personas.value = "";
-            personas.disabled = true;
+            actualizarContador();
 
         } else {
 
-            personas.value = "";
-            personas.disabled = true;
+            totalPersonas = 1;
+
+            personas.value = 1;
+
+            btnMenos.disabled = true;
+            btnMas.disabled = true;
 
         }
 
@@ -228,7 +299,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // ==========================================
-    // 8. ENVIAR CONFIRMACIÓN A SUPABASE
+    // 9. ENVIAR CONFIRMACIÓN A SUPABASE
     // ==========================================
 
     formRSVP.addEventListener(
@@ -248,9 +319,9 @@ document.addEventListener("DOMContentLoaded", function () {
             const asistira =
                 asistencia.value === "si";
 
-            const totalPersonas =
+            const numeroPersonas =
                 asistira
-                    ? Number(personas.value)
+                    ? totalPersonas
                     : 0;
 
 
@@ -265,7 +336,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 );
 
                 return;
-
             }
 
 
@@ -283,7 +353,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 );
 
                 return;
-
             }
 
 
@@ -294,22 +363,21 @@ document.addEventListener("DOMContentLoaded", function () {
             if (
                 asistira &&
                 (
-                    totalPersonas < 1 ||
-                    totalPersonas > 5
+                    numeroPersonas < 1 ||
+                    numeroPersonas > 5
                 )
             ) {
 
                 alert(
-                    "Selecciona el número de personas que asistirán."
+                    "El número de personas debe ser entre 1 y 5."
                 );
 
                 return;
-
             }
 
 
             // ======================================
-            // 9. GUARDAR EN SUPABASE
+            // 10. GUARDAR EN SUPABASE
             // ======================================
 
             const { error } = await db
@@ -318,13 +386,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     {
                         nombre: nombreInvitado,
                         asistencia: asistira,
-                        personas: totalPersonas
+                        personas: numeroPersonas
                     }
                 ]);
 
 
             // ======================================
-            // 10. COMPROBAR RESULTADO
+            // 11. COMPROBAR RESULTADO
             // ======================================
 
             if (error) {
@@ -339,12 +407,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 );
 
                 return;
-
             }
 
 
             // ======================================
-            // 11. PANTALLA FINAL
+            // 12. PANTALLA FINAL
             // ======================================
 
             const pantallaRespuesta =
@@ -386,12 +453,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 );
 
                 return;
-
             }
 
 
             // ======================================
-            // 12. MENSAJE SEGÚN RESPUESTA
+            // 13. MENSAJE SEGÚN RESPUESTA
             // ======================================
 
             if (asistira) {
@@ -404,9 +470,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 respuestaMensaje.innerHTML =
                     `Tu asistencia ha sido confirmada para
                     <strong>
-                        ${totalPersonas}
+                        ${numeroPersonas}
                         ${
-                            totalPersonas === 1
+                            numeroPersonas === 1
                                 ? "persona"
                                 : "personas"
                         }.
@@ -440,10 +506,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
             // ======================================
-            // 13. MOSTRAR RESPUESTA FINAL
+            // 14. MOSTRAR RESPUESTA FINAL
             // ======================================
 
             invitacion.style.display = "none";
+
             entrada.style.display = "none";
 
             pantallaRespuesta.style.display = "flex";
